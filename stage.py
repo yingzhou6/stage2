@@ -51,6 +51,9 @@ company_list={n:pd.DataFrame(m,index=['score']).transpose().reset_index() for n,
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUMEN],
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0'}])
+
+server = app.server
+
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(html.H1("Covid Sentiment",
