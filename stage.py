@@ -49,6 +49,10 @@ for i in new_key_dates:
 
 company_list={n:pd.DataFrame(m,index=['range']).transpose().reset_index() for n,m in coviddict.items()}
 
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUMEN],
+                meta_tags=[{'name': 'viewport',
+                            'content': 'width=device-width, initial-scale=1.0'}])
+
 server = app.server
 
 app.layout = dbc.Container([
