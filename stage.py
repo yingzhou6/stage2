@@ -27,8 +27,6 @@ for i in range(len(sentiment.Sentiment)):
 key_date1 = covid_dates['Timestamp']
 new_key_dates = list(map(lambda x : datetime.strptime(x,'%Y-%m-%d').date(),key_date1))
 
-newdf=sentiment[sentiment['Timestamp']>'2019-12-08'].reset_index()
-
 sentiment.Timestamp=pd.to_datetime(sentiment.Timestamp)
 sentiment.Timestamp= sentiment.Timestamp.apply(lambda x: x.date())
 
