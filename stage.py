@@ -28,15 +28,17 @@ for i in range(len(sentiment.Sentiment)):
 key_date1 = covid_dates['Timestamp']
 new_key_dates = list(map(lambda x : datetime.strptime(x,'%Y-%m-%d').date(),key_date1))
 
-sentiment.Timestamp=pd.to_datetime(sentiment.Timestamp)
-sentiment.Timestamp= sentiment.Timestamp.apply(lambda x: x.date())
+newdf=sentiment[sentiment['Timestamp']>'2019-12-08'].reset_index()
+
+newdf.Timestamp=pd.to_datetime(newdf.Timestamp)
+newdf.Timestamp= newdf.Timestamp.apply(lambda x: x.date())
 
 
 coviddict = {}
 for i in new_key_dates:
     range_up = i+timedelta(3)
     range_low = i-timedelta(3)
-    time_range=sentiment[(sentiment.Timestamp<=range_up) & (sentiment.Timestamp>=range_low)]
+    time_range=newdf[(newdf.Timestamp<=range_up) & (newdf.Timestamp>=range_low)]
     rangedict = {}
     for j in time_range.Ticker.unique():
         score = np.abs(time_range[time_range['Ticker']==j]['Sentiment'])
@@ -46,7 +48,7 @@ for i in new_key_dates:
     sort_ten={n:m for n,m in list(sort.items())[:11]}
     coviddict[i]=sort_ten
 
-company_list={n:pd.DataFrame(m,index=['score']).transpose().reset_index() for n,m in coviddict.items()}
+company_list={n:pd.DataFrame(m,index=['range']).transpose().reset_index() for n,m in coviddict.items()}
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUMEN],
                 meta_tags=[{'name': 'viewport',
