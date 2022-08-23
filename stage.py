@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 from datetime import datetime,timedelta
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
+import plotly.graph_objs as go
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+import pickle
 import plotly.express as px
 
 sentiment = pd.read_csv('newdata.csv')
