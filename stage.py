@@ -8,9 +8,8 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import plotly.express as px
 
-sentiment = pd.read_csv('Sentiment_Data_File_Daily.csv')
+sentiment = pd.read_csv('newdata.csv')
 covid_dates = pd.read_csv('covid_timeline.csv')
-sentiment = sentiment.dropna().reset_index()
 
 sent_mean=np.mean(sentiment.Sentiment)
 sent_std=np.std(sentiment.Sentiment)
@@ -30,15 +29,15 @@ new_key_dates = list(map(lambda x : datetime.strptime(x,'%Y-%m-%d').date(),key_d
 
 newdf=sentiment[sentiment['Timestamp']>'2019-12-08'].reset_index()
 
-newdf.Timestamp=pd.to_datetime(newdf.Timestamp)
-newdf.Timestamp= newdf.Timestamp.apply(lambda x: x.date())
+sentiment.Timestamp=pd.to_datetime(sentiment.Timestamp)
+sentiment.Timestamp= sentiment.Timestamp.apply(lambda x: x.date())
 
 
 coviddict = {}
 for i in new_key_dates:
     range_up = i+timedelta(3)
     range_low = i-timedelta(3)
-    time_range=newdf[(newdf.Timestamp<=range_up) & (newdf.Timestamp>=range_low)]
+    time_range=sentiment[(sentiment.Timestamp<=range_up) & (sentiment.Timestamp>=range_low)]
     rangedict = {}
     for j in time_range.Ticker.unique():
         score = np.abs(time_range[time_range['Ticker']==j]['Sentiment'])
@@ -49,10 +48,6 @@ for i in new_key_dates:
     coviddict[i]=sort_ten
 
 company_list={n:pd.DataFrame(m,index=['range']).transpose().reset_index() for n,m in coviddict.items()}
-
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUMEN],
-                meta_tags=[{'name': 'viewport',
-                            'content': 'width=device-width, initial-scale=1.0'}])
 
 server = app.server
 
